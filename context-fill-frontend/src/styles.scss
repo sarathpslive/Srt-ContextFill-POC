@@ -1,0 +1,135 @@
+
+// Include theming for Angular Material with `mat.theme()`.
+// Custom theme configuration for Context Fill POC
+@use '@angular/material' as mat;
+
+// Custom green color palette
+$primary-palette: (
+  50: #ecfdf5,
+  100: #d1fae5,
+  200: #a7f3d0,
+  300: #6ee7b7,
+  400: #34d399,
+  500: #10b981,
+  600: #059669,
+  700: #047857,
+  800: #065f46,
+  900: #064e3b,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+  )
+);
+
+html {
+  height: 100%;
+  @include mat.theme((
+    color: (
+      primary: mat.$green-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  // Default the application to a light color theme
+  color-scheme: light;
+
+  // Set a default background, font and text colors
+  background-color: #f8fafc;
+  color: #334155;
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  
+  // Reset the user agent margin
+  margin: 0;
+  height: 100%;
+}
+
+// Global scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+// Custom form field styles
+.mat-mdc-form-field {
+  margin-bottom: 8px;
+}
+
+// Snackbar positioning and styling
+.mat-mdc-snack-bar-container {
+  margin-bottom: 16px !important;
+}
+
+// Card elevation and styling
+.mat-mdc-card {
+  border: 1px solid #e2e8f0;
+  
+  &:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+// Button styling
+.mat-mdc-unelevated-button {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px;
+}
+
+.mat-mdc-outlined-button {
+  border-radius: 8px !important;
+}
+
+// Progress bar custom color
+.mat-mdc-progress-bar {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+// Tooltip styling
+.mat-mdc-tooltip {
+  font-size: 12px;
+}
+
+// Global link styling
+a {
+  color: #667eea;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Focus visible styling
+:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+

@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Form submissions collection
+    match /form_submissions/{submissionId} {
+      // Allow read/write for development (update for production)
+      allow read, write: if true;
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

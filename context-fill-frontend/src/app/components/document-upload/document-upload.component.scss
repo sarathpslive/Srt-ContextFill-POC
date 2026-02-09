@@ -1,0 +1,224 @@
+.upload-card {
+  margin-bottom: 24px;
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .header-icon {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+.drop-zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  cursor: pointer;
+
+  &:hover {
+    border-color: #10b981;
+    background: linear-gradient(180deg, #f8fafc 0%, #ecfdf5 100%);
+  }
+
+  &.drag-over {
+    border-color: #10b981;
+    background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+    transform: scale(1.02);
+  }
+}
+
+.drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  .upload-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #10b981;
+    opacity: 0.8;
+  }
+
+  h3 {
+    margin: 0;
+    color: #334155;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+  }
+
+  .supported-formats {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 8px;
+  }
+}
+
+.file-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  min-height: 200px;
+  align-items: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+}
+
+.pdf-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+
+  .pdf-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: #ef4444;
+  }
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.file-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  mat-icon {
+    color: #10b981;
+  }
+}
+
+.file-meta {
+  display: flex;
+  flex-direction: column;
+
+  .file-name {
+    font-weight: 500;
+    color: #334155;
+    word-break: break-all;
+  }
+
+  .file-size {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+}
+
+.processing-progress {
+  margin-top: 16px;
+  border-radius: 4px;
+  height: 6px !important;
+}
+
+.processing-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #10b981;
+  font-size: 14px;
+  margin: 12px 0 0;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border-radius: 8px;
+  color: #dc2626;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+mat-card-actions {
+  padding: 16px !important;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+  }
+}
+
+:host ::ng-deep {
+  .mdc-linear-progress__bar-inner {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%) !important;
+    border-color: transparent !important;
+  }
+
+  .mat-mdc-progress-bar {
+    --mdc-linear-progress-active-indicator-color: #10b981;
+  }
+
+  .mat-mdc-unelevated-button.mat-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    
+    &:hover {
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    }
+  }
+}

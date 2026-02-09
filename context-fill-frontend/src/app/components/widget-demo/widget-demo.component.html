@@ -1,0 +1,189 @@
+<div class="demo-container">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="hero-icon">
+        <mat-icon>auto_fix_high</mat-icon>
+      </div>
+      <h1>Context Fill Widget Demo</h1>
+      <p>Experience the power of AI-driven form auto-fill. Upload a document and watch the magic happen!</p>
+      <div class="hero-instructions">
+        <div class="instruction">
+          <span class="step">1</span>
+          <span>Click the green button in the bottom right</span>
+        </div>
+        <div class="instruction">
+          <span class="step">2</span>
+          <span>Upload an image or PDF with contact info</span>
+        </div>
+        <div class="instruction">
+          <span class="step">3</span>
+          <span>Click "Extract & Fill" to auto-fill the form</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sample Form -->
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="form-icon">person_add</mat-icon>
+      <mat-card-title>Contact Registration Form</mat-card-title>
+      <mat-card-subtitle>Fill manually or use the Context Fill widget</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form id="contact-form" name="contactForm" #contactForm="ngForm">
+        <!-- Personal Info Section -->
+        <div class="section-title">
+          <mat-icon>person</mat-icon>
+          <span>Personal Information</span>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput name="firstName" [(ngModel)]="formData.firstName" placeholder="John">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput name="lastName" [(ngModel)]="formData.lastName" placeholder="Doe">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" name="email" [(ngModel)]="formData.email" placeholder="john.doe@example.com">
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput name="phone" [(ngModel)]="formData.phone" placeholder="+1 (555) 123-4567">
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Address Section -->
+        <div class="section-title">
+          <mat-icon>location_on</mat-icon>
+          <span>Address</span>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Street Address</mat-label>
+          <input matInput name="address" [(ngModel)]="formData.address" placeholder="123 Main Street">
+          <mat-icon matPrefix>home</mat-icon>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput name="city" [(ngModel)]="formData.city" placeholder="San Francisco">
+            <mat-icon matPrefix>location_city</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput name="state" [(ngModel)]="formData.state" placeholder="California">
+            <mat-icon matPrefix>map</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>ZIP Code</mat-label>
+            <input matInput name="zipCode" [(ngModel)]="formData.zipCode" placeholder="94102">
+            <mat-icon matPrefix>markunread_mailbox</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <mat-select name="country" [(ngModel)]="formData.country">
+              <mat-option value="">Select country</mat-option>
+              @for (country of countries; track country) {
+                <mat-option [value]="country">{{ country }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matPrefix>public</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Professional Info Section -->
+        <div class="section-title">
+          <mat-icon>business</mat-icon>
+          <span>Professional Information</span>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Company</mat-label>
+            <input matInput name="company" [(ngModel)]="formData.company" placeholder="Acme Corp">
+            <mat-icon matPrefix>business</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Job Title</mat-label>
+            <input matInput name="jobTitle" [(ngModel)]="formData.jobTitle" placeholder="Software Engineer">
+            <mat-icon matPrefix>work</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Department</mat-label>
+          <input matInput name="department" [(ngModel)]="formData.department" placeholder="Engineering">
+          <mat-icon matPrefix>account_tree</mat-icon>
+        </mat-form-field>
+
+        <mat-divider></mat-divider>
+
+        <!-- Notes Section -->
+        <div class="section-title">
+          <mat-icon>notes</mat-icon>
+          <span>Additional Notes</span>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput name="notes" [(ngModel)]="formData.notes" rows="3" placeholder="Any additional information..."></textarea>
+          <mat-icon matPrefix>edit_note</mat-icon>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button type="button" (click)="clearForm()">
+        <mat-icon>refresh</mat-icon>
+        Clear
+      </button>
+      <button mat-flat-button color="primary" (click)="onSubmit()">
+        <mat-icon>send</mat-icon>
+        Submit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Info Card -->
+  <mat-card class="info-card">
+    <mat-card-content>
+      <div class="info-content">
+        <mat-icon>lightbulb</mat-icon>
+        <div>
+          <strong>Pro Tip:</strong> The widget automatically detects all forms on the page. 
+          You can also embed this widget on any website to provide AI-powered form filling!
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- The Widget -->
+<app-context-fill-widget></app-context-fill-widget>

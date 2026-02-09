@@ -1,0 +1,110 @@
+<mat-card class="upload-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar class="header-icon">upload_file</mat-icon>
+    <mat-card-title>Document Upload</mat-card-title>
+    <mat-card-subtitle>Upload an image or PDF to auto-fill the form</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Drop Zone -->
+    @if (!hasFile()) {
+      <div 
+        class="drop-zone"
+        [class.drag-over]="isDragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <div class="drop-zone-content">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <h3>Drag & Drop your document here</h3>
+          <p>or</p>
+          <button mat-flat-button color="primary" (click)="fileInput.click()">
+            <mat-icon>folder_open</mat-icon>
+            Browse Files
+          </button>
+          <input 
+            #fileInput 
+            type="file" 
+            hidden 
+            accept=".jpg,.jpeg,.png,.gif,.webp,.pdf"
+            (change)="onFileSelect($event)"
+          />
+          <p class="supported-formats">
+            Supported formats: JPEG, PNG, GIF, WebP, PDF (max 10MB)
+          </p>
+        </div>
+      </div>
+    }
+
+    <!-- File Preview -->
+    @if (hasFile()) {
+      <div class="file-preview">
+        <div class="preview-container">
+          @if (previewUrl()) {
+            <img [src]="previewUrl()" alt="Preview" class="preview-image" />
+          } @else {
+            <div class="pdf-preview">
+              <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+              <span>PDF Document</span>
+            </div>
+          }
+        </div>
+        
+        <div class="file-info">
+          <div class="file-details">
+            <mat-icon>description</mat-icon>
+            <div class="file-meta">
+              <span class="file-name">{{ uploadedFile()?.name }}</span>
+              <span class="file-size">{{ formatFileSize(uploadedFile()?.size || 0) }}</span>
+            </div>
+          </div>
+          
+          <button 
+            mat-icon-button 
+            color="warn" 
+            (click)="removeFile()"
+            [disabled]="isProcessing()"
+            matTooltip="Remove file"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        @if (isProcessing()) {
+          <mat-progress-bar 
+            mode="determinate" 
+            [value]="processingProgress()"
+            class="processing-progress"
+          ></mat-progress-bar>
+          <p class="processing-text">
+            <mat-icon class="spin">autorenew</mat-icon>
+            Extracting data with AI...
+          </p>
+        }
+
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div class="error-message">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    @if (hasFile() && !isProcessing()) {
+      <button mat-button (click)="removeFile()">
+        <mat-icon>clear</mat-icon>
+        Clear
+      </button>
+      <button mat-flat-button color="primary" (click)="extractData()">
+        <mat-icon>auto_fix_high</mat-icon>
+        Extract Data with AI
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

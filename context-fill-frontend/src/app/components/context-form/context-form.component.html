@@ -1,0 +1,326 @@
+<div class="form-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>auto_awesome</mat-icon>
+      </div>
+      <div class="header-text">
+        <h1>Smart Context Fill</h1>
+        <p>Upload a document and let AI extract the information automatically</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Document Upload Section -->
+    <div class="upload-section">
+      <app-document-upload (dataExtracted)="onDataExtracted($event)"></app-document-upload>
+
+      <!-- Auto-fill Status -->
+      @if (isAutoFilled()) {
+        <mat-card class="status-card success">
+          <mat-icon>check_circle</mat-icon>
+          <div class="status-content">
+            <strong>AI Extraction Complete</strong>
+            <span>{{ filledFieldsCount() }} fields auto-filled</span>
+          </div>
+          <mat-chip-set>
+            @for (field of autoFilledFields(); track field) {
+              <mat-chip highlighted color="primary">
+                {{ formatFieldLabel(field) }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </mat-card>
+      }
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-section">
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="form-icon">person_add</mat-icon>
+          <mat-card-title>Contact Information</mat-card-title>
+          <mat-card-subtitle>Required fields are marked with *</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="contextForm" (ngSubmit)="submitForm()">
+            <!-- Personal Information -->
+            <div class="section-title">
+              <mat-icon>person</mat-icon>
+              <span>Personal Details</span>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>First Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="firstName" 
+                  placeholder="Enter first name"
+                  [class.auto-filled]="isFieldAutoFilled('firstName')"
+                />
+                <mat-icon matPrefix>badge</mat-icon>
+                @if (isFieldAutoFilled('firstName')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+                <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Last Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="lastName" 
+                  placeholder="Enter last name"
+                  [class.auto-filled]="isFieldAutoFilled('lastName')"
+                />
+                <mat-icon matPrefix>badge</mat-icon>
+                @if (isFieldAutoFilled('lastName')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+                <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Email Address</mat-label>
+                <input 
+                  matInput 
+                  type="email"
+                  formControlName="email" 
+                  placeholder="Enter email address"
+                  [class.auto-filled]="isFieldAutoFilled('email')"
+                />
+                <mat-icon matPrefix>email</mat-icon>
+                @if (isFieldAutoFilled('email')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+                <mat-error>{{ getErrorMessage('email') }}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Phone Number</mat-label>
+                <input 
+                  matInput 
+                  formControlName="phone" 
+                  placeholder="Enter phone number"
+                  [class.auto-filled]="isFieldAutoFilled('phone')"
+                />
+                <mat-icon matPrefix>phone</mat-icon>
+                @if (isFieldAutoFilled('phone')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+                <mat-error>{{ getErrorMessage('phone') }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Address Information -->
+            <div class="section-title">
+              <mat-icon>location_on</mat-icon>
+              <span>Address</span>
+            </div>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Street Address</mat-label>
+              <input 
+                matInput 
+                formControlName="address" 
+                placeholder="Enter street address"
+                [class.auto-filled]="isFieldAutoFilled('address')"
+              />
+              <mat-icon matPrefix>home</mat-icon>
+              @if (isFieldAutoFilled('address')) {
+                <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+              }
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>City</mat-label>
+                <input 
+                  matInput 
+                  formControlName="city" 
+                  placeholder="Enter city"
+                  [class.auto-filled]="isFieldAutoFilled('city')"
+                />
+                <mat-icon matPrefix>location_city</mat-icon>
+                @if (isFieldAutoFilled('city')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>State / Province</mat-label>
+                <input 
+                  matInput 
+                  formControlName="state" 
+                  placeholder="Enter state"
+                  [class.auto-filled]="isFieldAutoFilled('state')"
+                />
+                <mat-icon matPrefix>map</mat-icon>
+                @if (isFieldAutoFilled('state')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>ZIP / Postal Code</mat-label>
+                <input 
+                  matInput 
+                  formControlName="zipCode" 
+                  placeholder="Enter ZIP code"
+                  [class.auto-filled]="isFieldAutoFilled('zipCode')"
+                />
+                <mat-icon matPrefix>markunread_mailbox</mat-icon>
+                @if (isFieldAutoFilled('zipCode')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+                <mat-error>{{ getErrorMessage('zipCode') }}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country" [class.auto-filled]="isFieldAutoFilled('country')">
+                  <mat-option value="">Select country</mat-option>
+                  @for (country of countries; track country) {
+                    <mat-option [value]="country">{{ country }}</mat-option>
+                  }
+                </mat-select>
+                <mat-icon matPrefix>public</mat-icon>
+                @if (isFieldAutoFilled('country')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+              </mat-form-field>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <!-- Professional Information -->
+            <div class="section-title">
+              <mat-icon>business</mat-icon>
+              <span>Professional Details</span>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Company</mat-label>
+                <input 
+                  matInput 
+                  formControlName="company" 
+                  placeholder="Enter company name"
+                  [class.auto-filled]="isFieldAutoFilled('company')"
+                />
+                <mat-icon matPrefix>business</mat-icon>
+                @if (isFieldAutoFilled('company')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Job Title</mat-label>
+                <input 
+                  matInput 
+                  formControlName="jobTitle" 
+                  placeholder="Enter job title"
+                  [class.auto-filled]="isFieldAutoFilled('jobTitle')"
+                />
+                <mat-icon matPrefix>work</mat-icon>
+                @if (isFieldAutoFilled('jobTitle')) {
+                  <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+                }
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Department</mat-label>
+              <input 
+                matInput 
+                formControlName="department" 
+                placeholder="Enter department"
+                [class.auto-filled]="isFieldAutoFilled('department')"
+              />
+              <mat-icon matPrefix>account_tree</mat-icon>
+              @if (isFieldAutoFilled('department')) {
+                <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+              }
+            </mat-form-field>
+
+            <mat-divider></mat-divider>
+
+            <!-- Additional Notes -->
+            <div class="section-title">
+              <mat-icon>notes</mat-icon>
+              <span>Additional Notes</span>
+            </div>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Notes</mat-label>
+              <textarea 
+                matInput 
+                formControlName="notes" 
+                placeholder="Enter any additional notes"
+                rows="4"
+                [class.auto-filled]="isFieldAutoFilled('notes')"
+              ></textarea>
+              <mat-icon matPrefix>edit_note</mat-icon>
+              @if (isFieldAutoFilled('notes')) {
+                <mat-icon matSuffix class="auto-fill-icon" matTooltip="Auto-filled by AI">auto_fix_high</mat-icon>
+              }
+            </mat-form-field>
+          </form>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-button type="button" (click)="clearForm()" [disabled]="isSubmitting()">
+            <mat-icon>refresh</mat-icon>
+            Reset Form
+          </button>
+          <button 
+            mat-flat-button 
+            color="primary" 
+            type="submit"
+            (click)="submitForm()"
+            [disabled]="isSubmitting()"
+          >
+            @if (isSubmitting()) {
+              <ng-container>
+                <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                <span>Submitting...</span>
+              </ng-container>
+            } @else {
+              <ng-container>
+                <mat-icon>send</mat-icon>
+                <span>Submit Form</span>
+              </ng-container>
+            }
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Success Message -->
+      @if (submissionSuccess()) {
+        <mat-card class="status-card success submission-success">
+          <mat-icon>celebration</mat-icon>
+          <div class="status-content">
+            <strong>Form Submitted Successfully!</strong>
+            @if (lastSubmissionId()) {
+              <span>Submission ID: {{ lastSubmissionId() }}</span>
+            }
+          </div>
+          <button mat-flat-button color="primary" (click)="clearForm()">
+            <mat-icon>add</mat-icon>
+            Submit Another
+          </button>
+        </mat-card>
+      }
+    </div>
+  </div>
+</div>

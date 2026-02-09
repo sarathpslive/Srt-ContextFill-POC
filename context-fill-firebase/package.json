@@ -1,0 +1,13 @@
+{
+  "name": "context-fill-firebase",
+  "version": "1.0.0",
+  "description": "Firebase configuration and emulator setup for Context Fill POC",
+  "scripts": {
+    "emulator": "firebase emulators:start",
+    "emulator:export": "firebase emulators:export ./data",
+    "emulator:import": "firebase emulators:start --import=./data"
+  },
+  "keywords": ["firebase", "firestore", "emulator"],
+  "author": "",
+  "license": "ISC"
+}
