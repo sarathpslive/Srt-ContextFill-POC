@@ -23,7 +23,7 @@ class GeminiService {
   private getClient(): GoogleGenerativeAI {
     if (!this.genAI) {
       const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+      if (!apiKey) {
         throw new Error('GEMINI_API_KEY is not configured. Please set it in your .env file.');
       }
       this.genAI = new GoogleGenerativeAI(apiKey);
@@ -34,7 +34,7 @@ class GeminiService {
   async extractFormDataFromImage(imageBase64: string, mimeType: string): Promise<ExtractedFormData> {
     try {
       const genAI = this.getClient();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
       const prompt = `Analyze this document image and extract any personal or business information that could be used to fill a form. 
       
@@ -67,7 +67,7 @@ Return ONLY a valid JSON object, no additional text or markdown. Use null for fi
 
       const response = await result.response;
       const text = response.text();
-      
+
       // Parse JSON from response
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
@@ -81,7 +81,7 @@ Return ONLY a valid JSON object, no additional text or markdown. Use null for fi
         }
         return cleaned;
       }
-      
+
       return {};
     } catch (error) {
       console.error('Error extracting form data from image:', error);
@@ -92,7 +92,7 @@ Return ONLY a valid JSON object, no additional text or markdown. Use null for fi
   async extractFormDataFromPDF(pdfBase64: string): Promise<ExtractedFormData> {
     try {
       const genAI = this.getClient();
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
       const prompt = `Analyze this PDF document and extract any personal or business information that could be used to fill a form.
       
@@ -125,7 +125,7 @@ Return ONLY a valid JSON object, no additional text or markdown. Use null for fi
 
       const response = await result.response;
       const text = response.text();
-      
+
       // Parse JSON from response
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
@@ -139,7 +139,7 @@ Return ONLY a valid JSON object, no additional text or markdown. Use null for fi
         }
         return cleaned;
       }
-      
+
       return {};
     } catch (error) {
       console.error('Error extracting form data from PDF:', error);
