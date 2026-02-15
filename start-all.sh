@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Context Fill POC - Start All Services Script
-# This script starts all three services: Firebase Emulator, Backend, and Frontend
+# This script starts the Backend and Frontend services
 
 echo "🚀 Starting Context Fill POC Services..."
 echo ""
@@ -44,20 +44,16 @@ echo ""
 echo "✅ All services started!"
 echo ""
 echo "📊 Service URLs:"
-echo "   Frontend:          http://localhost:4200"
-echo "   Backend API:       http://localhost:3000"
-echo "   Firebase Emulator: http://localhost:4000"
-echo "   Firestore:         localhost:8080"
-echo ""
-echo "📝 Logs:"
-echo "   Firebase: /tmp/firebase-emulator.log"
-echo "   Backend:  /tmp/backend-server.log"
-echo "   Frontend: /tmp/frontend.log"
-echo ""
-echo "Press Ctrl+C to http://localhost:4200"
+echo "   Frontend:    http://localhost:4200"
 echo "   Backend API: http://localhost:3000"
 echo ""
 echo "📝 Logs:"
 echo "   Backend:  /tmp/backend-server.log"
 echo "   Frontend: /tmp/frontend.log"
-echo "   Form Submissions: context-fill-backend/form_submissions
+echo "   Form Submissions: context-fill-backend/form_submissions.log"
+echo ""
+echo "Press Ctrl+C to stop all services."
+echo ""
+
+# Wait for processes
+wait
