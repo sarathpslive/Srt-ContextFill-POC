@@ -3,16 +3,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { documentRoutes } from './routes/document.routes';
 import { formRoutes } from './routes/form.routes';
-import { initializeFirebase } from './config/firebase.config';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Initialize Firebase
-initializeFirebase();
 
 // Middleware
 app.use(cors({

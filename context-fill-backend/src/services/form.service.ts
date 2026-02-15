@@ -1,5 +1,6 @@
-import { getFirestore, admin } from '../config/firebase.config';
 import { v4 as uuidv4 } from 'uuid';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface FormSubmission {
   id: string;
@@ -17,17 +18,22 @@ export interface FormSubmission {
   department?: string;
   notes?: string;
   sourceDocument?: string;
-  createdAt: admin.firestore.Timestamp;
-  updatedAt: admin.firestore.Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const COLLECTION_NAME = 'form_submissions';
+const SUBMISSIONS: FormSubmission[] = [];
+const LOG_FILE = path.join(process.cwd(), 'form_submissions.log');
 
 class FormService {
+  private logSubmission(submission: FormSubmission): void {
+    const logEntry = `[${new Date().toISOString()}] ${JSON.stringify(submission)}\n`;
+    fs.appendFileSync(LOG_FILE, logEntry);
+  }
+
   async createFormSubmission(data: Omit<FormSubmission, 'id' | 'createdAt' | 'updatedAt'>): Promise<FormSubmission> {
-    const db = getFirestore();
     const id = uuidv4();
-    const now = admin.firestore.Timestamp.now();
+    const now = new Date().toISOString();
     
     const submission: FormSubmission = {
       ...data,
@@ -36,62 +42,50 @@ class FormService {
       updatedAt: now
     };
 
-    await db.collection(COLLECTION_NAME).doc(id).set(submission);
+    SUBMISSIONS.push(submission);
+    this.logSubmission(submission);
     console.log(`✅ Form submission created with ID: ${id}`);
     
     return submission;
   }
 
   async getFormSubmission(id: string): Promise<FormSubmission | null> {
-    const db = getFirestore();
-    const doc = await db.collection(COLLECTION_NAME).doc(id).get();
-    
-    if (!doc.exists) {
-      return null;
-    }
-    
-    return doc.data() as FormSubmission;
+    return SUBMISSIONS.find(submission => submission.id === id) || null;
   }
 
   async getAllFormSubmissions(): Promise<FormSubmission[]> {
-    const db = getFirestore();
-    const snapshot = await db.collection(COLLECTION_NAME)
-      .orderBy('createdAt', 'desc')
-      .get();
-    
-    return snapshot.docs.map(doc => doc.data() as FormSubmission);
+    return SUBMISSIONS.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }
 
   async updateFormSubmission(id: string, data: Partial<Omit<FormSubmission, 'id' | 'createdAt' | 'updatedAt'>>): Promise<FormSubmission | null> {
-    const db = getFirestore();
-    const docRef = db.collection(COLLECTION_NAME).doc(id);
-    const doc = await docRef.get();
+    const index = SUBMISSIONS.findIndex(submission => submission.id === id);
     
-    if (!doc.exists) {
+    if (index === -1) {
       return null;
     }
     
-    const updateData = {
+    const updated: FormSubmission = {
+      ...SUBMISSIONS[index],
       ...data,
-      updatedAt: admin.firestore.Timestamp.now()
+      updatedAt: new Date().toISOString()
     };
     
-    await docRef.update(updateData);
+    SUBMISSIONS[index] = updated;
+    this.logSubmission(updated);
     
-    const updated = await docRef.get();
-    return updated.data() as FormSubmission;
+    return updated;
   }
 
   async deleteFormSubmission(id: string): Promise<boolean> {
-    const db = getFirestore();
-    const docRef = db.collection(COLLECTION_NAME).doc(id);
-    const doc = await docRef.get();
+    const index = SUBMISSIONS.findIndex(submission => submission.id === id);
     
-    if (!doc.exists) {
+    if (index === -1) {
       return false;
     }
     
-    await docRef.delete();
+    SUBMISSIONS.splice(index, 1);
     console.log(`🗑️ Form submission deleted: ${id}`);
     return true;
   }
