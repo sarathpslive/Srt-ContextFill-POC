@@ -18,7 +18,7 @@ cleanup() {
     echo "🛑 Stopping all services..."
     pkill -f "firebase emulators" 2>/dev/null
     pkill -f "ts-node src/server.ts" 2>/dev/null
-    pkill -f "ng serve" 2>/dev/null
+    pkill -f "npm run start" 2>/dev/null
     exit 0
 }
 
@@ -47,7 +47,7 @@ sleep 3
 # Start Frontend Application
 echo "🌐 Starting Frontend Application..."
 cd context-fill-frontend
-ng serve > /tmp/frontend.log 2>&1 &
+npm run start > /tmp/frontend.log 2>&1 &
 FRONTEND_PID=$!
 cd ..
 
